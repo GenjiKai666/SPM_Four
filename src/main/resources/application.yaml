@@ -1,0 +1,18 @@
+spring:
+  # 数据库的简单配置，主要是为了加入mybatis依赖之后，Springboot可以正常启动
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test?allowMultiQueries=true
+    username: test
+    password: "123456"
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+
+#mybatis-plus
+mybatis-plus:
+  type-aliases-package: cn.edu.usst.spm.bean.po
+  mapper-locations: classpath*:/mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
