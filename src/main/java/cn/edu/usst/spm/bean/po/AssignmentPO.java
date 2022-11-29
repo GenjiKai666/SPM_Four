@@ -26,5 +26,5 @@ public class AssignmentPO {
     @TableField
     private String question;    //题干
     @TableField
-    private Date deadLine;      //结束时间
+    private Date deadline;      //结束时间
 }
