@@ -26,9 +26,9 @@ public class AssignmentController {
      */
     @RequestMapping(value = "/assignment/insert", method = RequestMethod.POST)
     public int insertAssignment(@NotNull @RequestParam("question") String question,
-                                @NotNull @RequestParam("date") long date) {
-        // TODO 关于作业设置小组的逻辑添加
-        return assignmentService.insertAssignment(new AssignmentPO(null, question, new Date(date),false));
+                                @NotNull @RequestParam("date") long date,
+                                @NotNull @RequestParam("bygroup") boolean byGroup) {
+        return assignmentService.insertAssignment(new AssignmentPO(null, question, new Date(date),byGroup));
     }
 
     /**
@@ -41,9 +41,9 @@ public class AssignmentController {
     public AssignmentVO selectAssignmentById(@NotNull @RequestParam("id") Integer id) {
         AssignmentPO assignmentPO = assignmentService.selectAssignmentById(id);
         if (assignmentPO == null) {
-            return new AssignmentVO(null, null);
+            return new AssignmentVO(null, null,null);
         }
-        return new AssignmentVO(assignmentPO.getQuestion(), assignmentPO.getDeadline());
+        return new AssignmentVO(assignmentPO.getQuestion(), assignmentPO.getDeadline(),assignmentPO.getByGroup());
     }
 
     /**

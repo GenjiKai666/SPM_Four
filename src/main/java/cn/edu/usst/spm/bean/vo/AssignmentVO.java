@@ -13,4 +13,5 @@ import java.util.Date;
 public class AssignmentVO {
     String question;
     Date deadline;
+    Boolean byGroup;
 }
