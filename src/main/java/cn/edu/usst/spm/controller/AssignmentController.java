@@ -27,7 +27,8 @@ public class AssignmentController {
     @RequestMapping(value = "/assignment/insert", method = RequestMethod.POST)
     public int insertAssignment(@NotNull @RequestParam("question") String question,
                                 @NotNull @RequestParam("date") long date) {
-        return assignmentService.insertAssignment(new AssignmentPO(null, question, new Date(date)));
+        // TODO 关于作业设置小组的逻辑添加
+        return assignmentService.insertAssignment(new AssignmentPO(null, question, new Date(date),false));
     }
 
     /**
