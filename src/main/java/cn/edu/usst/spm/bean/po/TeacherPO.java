@@ -9,6 +9,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 /**
  * 老师的实体类，和数据库的老师表相对应。
  * 可以使用 {@link cn.edu.usst.spm.mapper.TeacherMapper} 实现数据库操作老师表。
@@ -20,9 +22,13 @@ import lombok.NoArgsConstructor;
 @TableName("TEACHER")
 public class TeacherPO {
     @TableId(type = IdType.AUTO)
-    Integer id;   //老师工号 自增
+    private Integer id;   //老师工号 自增
     @TableField
-    String username;    //老师姓名，并且用此来登陆
+    private String username;    //老师姓名，并且用此来登陆
     @TableField
-    String password;    //登陆密码
+    private String password;    //登陆密码
+    @TableField
+    private Date courseTime;  // 上课开始时间
+    @TableField
+    private String courseLocation;  // 上课地点，长度不要超过15
 }

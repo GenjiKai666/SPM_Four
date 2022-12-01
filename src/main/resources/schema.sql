@@ -11,12 +11,15 @@ create table if not exists
     PHONE      varchar(15)  not null
 ) charset = utf8mb4;
 
+-- 注意要指定连接的时区
 create table if not exists
     TEACHER
 (
-    ID       int          not null auto_increment primary key,
-    USERNAME varchar(20)  not null unique,
-    PASSWORD varchar(128) not null
+    ID              int          not null auto_increment primary key,
+    USERNAME        varchar(20)  not null unique,
+    PASSWORD        varchar(128) not null,
+    COURSE_TIME     timestamp    not null comment '上课开始时间',
+    COURSE_LOCATION varchar(20)  not null
 ) charset = utf8mb4;
 
 create table if not exists
