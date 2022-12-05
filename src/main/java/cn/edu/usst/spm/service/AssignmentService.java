@@ -1,14 +1,19 @@
 package cn.edu.usst.spm.service;
 
 import cn.edu.usst.spm.bean.po.AssignmentPO;
+import cn.edu.usst.spm.bean.po.StudentTeacherAssignmentPO;
 import cn.edu.usst.spm.mapper.AssignmentMapper;
+import cn.edu.usst.spm.mapper.StudentTeacherAssignmentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class AssignmentService {
     @Autowired
     AssignmentMapper assignmentMapper;
+    @Autowired
+    StudentTeacherAssignmentMapper studentTeacherAssignmentMapper;
 
     /**
      * 向数据库中插入新的作业
@@ -44,5 +49,18 @@ public class AssignmentService {
             return 1;
         }
         return 0;
+    }
+    public int studentSubmitAnswer(Integer assignmentId, Integer studentTeacherId, String answer){
+        studentTeacherAssignmentMapper.insert(new StudentTeacherAssignmentPO(null,
+                assignmentId,studentTeacherId,answer,null));
+        return 1;
+    }
+    public int teacherCheckById(Integer id,Double score){
+        studentTeacherAssignmentMapper.updateById(new StudentTeacherAssignmentPO(id,
+                null,
+                null,
+                null,
+                score));
+        return 1;
     }
 }

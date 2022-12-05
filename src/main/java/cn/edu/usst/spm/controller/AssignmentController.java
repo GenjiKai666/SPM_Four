@@ -2,6 +2,7 @@ package cn.edu.usst.spm.controller;
 
 import cn.edu.usst.spm.bean.po.AssignmentPO;
 import cn.edu.usst.spm.bean.vo.AssignmentVO;
+import cn.edu.usst.spm.mapper.StudentTeacherAssignmentMapper;
 import cn.edu.usst.spm.service.AssignmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,5 +56,16 @@ public class AssignmentController {
     @RequestMapping(value = "/assignment/delete", method = RequestMethod.POST)
     public int deleteAssignmentById(@NotNull @RequestParam("id") Integer id) {
         return assignmentService.deleteAssignmentById(id);
+    }
+    @RequestMapping(value = "/assignment/student_submit",method = RequestMethod.POST)
+    public int studentSubmitAnswer(@NotNull @RequestParam("assignmentid") Integer assignmentId,
+                                   @NotNull @RequestParam("studentteacherid") Integer studentTeacherId,
+                                   @RequestParam("answer") String answer){
+        return  assignmentService.studentSubmitAnswer(assignmentId,studentTeacherId,answer);
+    }
+    @RequestMapping(value = "/assignment/teacher_check",method = RequestMethod.POST)
+    public int teacherCheckById(@NotNull @RequestParam("id") Integer id,
+                                @NotNull @RequestParam("score") Double score){
+        return assignmentService.teacherCheckById(id,score);
     }
 }
