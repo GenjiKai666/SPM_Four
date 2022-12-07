@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,14 +22,21 @@ import java.util.Date;
 @EqualsAndHashCode
 @TableName("TEACHER")
 public class TeacherPO {
-    @TableId(type = IdType.AUTO)
-    private Integer id;   //老师工号 自增
-    @TableField
-    private String username;    //老师姓名，并且用此来登陆
-    @TableField
-    private String password;    //登陆密码
-    @TableField
-    private Date courseTime;  // 上课开始时间
-    @TableField
-    private String courseLocation;  // 上课地点，长度不要超过15
+
+    @TableId(value="ID",type = IdType.AUTO)
+    private Integer id;
+
+    @TableField("USERNAME")
+    private String userName;
+
+    //忽略password，不将其进行展示
+    @JsonIgnore
+    @TableField("PASSWORD")
+    private String password;
+
+    @TableField("COURSE_TIME")
+    private String courseTime;
+
+    @TableField("COURSE_LOCATION")
+    private String courseLocation;
 }
