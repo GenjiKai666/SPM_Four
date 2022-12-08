@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 @TableName("STUDENT_TEACHER")
 public class StudentTeacherPO {
-    @TableId(type = IdType.AUTO)
+//    @TableId(type = IdType.AUTO)
     private Integer id;         // 逻辑主键，自增
     @TableField
     private Integer studentId;  //学生ID，外键
