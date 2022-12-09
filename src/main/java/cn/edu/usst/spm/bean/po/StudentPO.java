@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -26,6 +27,7 @@ public class StudentPO {
     String className;   //班级名
     @TableField("USERNAME")
     String username;    //学生真实姓名以及登陆用户名
+    @JsonIgnore
     @TableField("PASSWORD")
     String password;    //登陆密码
     @TableField("EMAIL")

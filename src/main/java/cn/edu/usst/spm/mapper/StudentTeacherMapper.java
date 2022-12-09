@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -19,4 +20,7 @@ public interface StudentTeacherMapper extends BaseMapper<StudentTeacherPO> {
 
     @Select("SELECT * FROM STUDENT WHERE ID = ANY (SELECT STUDENT_ID FROM STUDENT_TEACHER WHERE TEACHER_ID = #{teacherId})")
     List<StudentPO> findStudentByTeacherId(Integer teacherId);
+
+    @Update("UPDATE STUDENT_TEACHER SET IS_CONFIRMED = 1 WHERE TEACHER_ID=#{teacherId}")
+    void confirmed(Integer teacherId);
 }
