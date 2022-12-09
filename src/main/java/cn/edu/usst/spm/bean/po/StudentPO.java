@@ -20,16 +20,16 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 @TableName("STUDENT")
 public class StudentPO {
-    @TableId(type = IdType.AUTO)
+    @TableId(value="ID" ,type = IdType.AUTO)
     Integer id;         //学号,自增
-    @TableField
+    @TableField("CLASS_NAME")
     String className;   //班级名
-    @TableField
+    @TableField("USERNAME")
     String username;    //学生真实姓名以及登陆用户名
-    @TableField
+    @TableField("PASSWORD")
     String password;    //登陆密码
-    @TableField
+    @TableField("EMAIL")
     String email;       //电子邮箱
-    @TableField
+    @TableField("PHONE")
     String phone;       //电话号码
 }
