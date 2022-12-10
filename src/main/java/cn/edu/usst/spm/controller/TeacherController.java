@@ -1,11 +1,16 @@
 package cn.edu.usst.spm.controller;
 
 
+import cn.edu.usst.spm.bean.LoginUserImpl;
+import cn.edu.usst.spm.bean.po.TeacherPO;
+import cn.edu.usst.spm.mapper.TeacherMapper;
 import cn.edu.usst.spm.req.TeacherLoginReq;
 import cn.edu.usst.spm.req.TeacherSaveReq;
 import cn.edu.usst.spm.resp.CommonResp;
 import cn.edu.usst.spm.resp.TeacherLoginResp;
 import cn.edu.usst.spm.service.TeacherService;
+import cn.edu.usst.spm.util.Constant;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,8 +23,8 @@ public class TeacherController {
 
     @Autowired
     private TeacherService teacherService;
-//    @Autowired
-//    private Teachermapper teachermapper;
+    @Autowired
+    private TeacherMapper teacherMapper;
 
     @PostMapping("/login")
     public CommonResp login(@RequestBody TeacherLoginReq req, HttpSession session){
@@ -29,8 +34,12 @@ public class TeacherController {
             resp.setSuccess(false);
             return resp;
         }
-        session.setAttribute("username",teacherLoginResp.getUsername());
-        session.setAttribute("isTeacher",true);
+        session.setAttribute("username", teacherLoginResp.getUsername());
+        session.setAttribute("isTeacher", true);
+        // 补充之前定义的接口的登陆状态记录，不移除上面的记录，防止不兼容问题发生
+        TeacherPO teacherPO = teacherMapper.selectOne(Wrappers.lambdaQuery(TeacherPO.class)
+                .eq(TeacherPO::getUserName, teacherLoginResp.getUsername()));
+        session.setAttribute(Constant.USER, new LoginUserImpl(teacherPO.getId(), false));
         return resp;
     }
     @PostMapping("/register")

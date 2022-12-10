@@ -1,5 +1,6 @@
 package cn.edu.usst.spm.controller;
 
+import cn.edu.usst.spm.bean.LoginUserImpl;
 import cn.edu.usst.spm.bean.po.StudentPO;
 import cn.edu.usst.spm.mapper.StudentMapper;
 import cn.edu.usst.spm.req.StudentLoginReq;
@@ -8,6 +9,8 @@ import cn.edu.usst.spm.req.TeamReq;
 import cn.edu.usst.spm.resp.CommonResp;
 import cn.edu.usst.spm.resp.StudentLoginResp;
 import cn.edu.usst.spm.service.StudentService;
+import cn.edu.usst.spm.util.Constant;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,8 +34,12 @@ public class StudentController {
             resp.setSuccess(false);
             return resp;
         }
-        session.setAttribute("username",studentLoginResp.getUsername());
-        session.setAttribute("isTeacher",false);
+        session.setAttribute("username", studentLoginResp.getUsername());
+        session.setAttribute("isTeacher", false);
+        // 补充之前定义的接口的登陆状态记录，不移除上面的记录，防止不兼容问题发生
+        StudentPO studentPO = studentrmapper.selectOne(Wrappers.lambdaQuery(StudentPO.class)
+                .eq(StudentPO::getUsername, studentLoginResp.getUsername()));
+        session.setAttribute(Constant.USER, new LoginUserImpl(studentPO.getId(), false));
         return resp;
     }
     @PostMapping("/register")
