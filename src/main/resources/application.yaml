@@ -14,6 +14,22 @@ spring:
     hiddenmethod:
       filter:
         enabled: true
+  mail:
+    protocol: "smtp"
+    host: smtp.qq.com
+    # 邮箱地址
+    username: "xxxxxx@qq.com"
+    # 邮箱的smtp服务的密码
+    password: "xxxxxxx密码"
+    # 这是测试邮箱服务器的连接，如果没有配置正确的邮箱地址和密码，请注释该条配置
+    #test-connection: true
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
 
 #mybatis-plus
 mybatis-plus:
