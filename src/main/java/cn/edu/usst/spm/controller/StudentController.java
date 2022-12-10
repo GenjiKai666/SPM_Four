@@ -4,7 +4,6 @@ import cn.edu.usst.spm.bean.LoginUserImpl;
 import cn.edu.usst.spm.bean.po.StudentPO;
 import cn.edu.usst.spm.mapper.StudentMapper;
 import cn.edu.usst.spm.mapper.StudentTeacherMapper;
-import cn.edu.usst.spm.req.GroupReq;
 import cn.edu.usst.spm.req.StudentLoginReq;
 import cn.edu.usst.spm.req.StudentSaveReq;
 import cn.edu.usst.spm.req.TeamReq;
@@ -71,7 +70,7 @@ public class StudentController {
     }
 
     @PostMapping("/team")
-    public CommonResp Teamup(@RequestBody GroupReq req) {
+    public CommonResp Teamup(@RequestBody TeamReq req) {
         CommonResp resp = new CommonResp<>();
         Boolean teamresp = studentService.saveteam(req);
 //        resp.setContent(studentLoginResp);
