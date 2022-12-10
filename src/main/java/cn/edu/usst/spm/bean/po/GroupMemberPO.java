@@ -1,5 +1,6 @@
 package cn.edu.usst.spm.bean.po;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -22,7 +23,8 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 @TableName("GROUP_MEMBER")
 public class GroupMemberPO {
-    @TableId
+    //自增，插入时不需要赋值
+    @TableId(type = IdType.AUTO)
     private Integer id;                 // 逻辑主键，id
     @TableField
     private Integer groupId;            // 小组的id

@@ -17,7 +17,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-@TableName("GROUP")
+/**
+ * group是mysql关键字，插入和查询的时候会报语法错误，改为非关键字01或其他都可以运行成功
+ */
+@TableName("GROUP01")
 public class GroupPO {
     @TableId
     private Integer id;                 // 逻辑主键，id

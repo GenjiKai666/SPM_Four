@@ -1,9 +1,14 @@
 package cn.edu.usst.spm.service.imp;
 
+import cn.edu.usst.spm.bean.po.GroupMemberPO;
+import cn.edu.usst.spm.bean.po.GroupPO;
 import cn.edu.usst.spm.bean.po.StudentPO;
 import cn.edu.usst.spm.bean.po.Team;
+import cn.edu.usst.spm.mapper.GroupMapper;
+import cn.edu.usst.spm.mapper.GroupMemberMapper;
 import cn.edu.usst.spm.mapper.StudentMapper;
 import cn.edu.usst.spm.mapper.Teammapper;
+import cn.edu.usst.spm.req.GroupReq;
 import cn.edu.usst.spm.req.StudentLoginReq;
 import cn.edu.usst.spm.req.StudentSaveReq;
 import cn.edu.usst.spm.req.TeamReq;
@@ -27,6 +32,11 @@ public class StudentServiceimp extends ServiceImpl<StudentMapper, StudentPO> imp
     StudentMapper studentrmapper;
     @Autowired
     Teammapper teammapper;
+    @Autowired
+    GroupMapper groupMapper;
+    @Autowired
+    GroupMemberMapper groupMemberMapper;
+
     @Override
     public boolean register(StudentSaveReq req) {
         StudentPO student = CopyUtil.copy(req, StudentPO.class);
@@ -58,47 +68,54 @@ public class StudentServiceimp extends ServiceImpl<StudentMapper, StudentPO> imp
 
 
     @Override
-    public boolean saveteam(TeamReq req) {
-        //每一位都要查
-        Team team = CopyUtil.copy(req, Team.class);
-        List<Team> teamDb01;
-        List<Team> teamDb02 = null;
-        List<Team> teamDb03 = null;
-        List<Team> teamDb04 = null;
-        List<Team> teamDb05 = null;
-        if(req.getHeadman() != null ){
-            //组长不为空
-            teamDb01 = selectByheadman(req.getHeadman());
-            if(ObjectUtils.isEmpty(teamDb01)){
-                //为组长为空，可能此组长为其他组的组员，下面从组员开始找
-                teamDb01 = teammapper.selectmember(req.getHeadman());
-                if(req.getMember01().equals("")){
-                    //member01存在，则检查在数据库中是否存在
-                     teamDb02 = teammapper.selectmember(req.getMember01());
-                }
-                if(req.getMember02().equals("")){
-                    //member02存在，则检查在数据库中是否存在
-                    teamDb03 = teammapper.selectmember(req.getMember02());
-                }
-                if(req.getMember03().equals("")){
-                    //member03存在，则检查在数据库中是否存在
-                    teamDb04 = teammapper.selectmember(req.getMember03());
-                }
-                if(req.getMember04().equals("")){
-                    //member04存在，则检查在数据库中是否存在
-                    teamDb05 =teammapper.selectmember(req.getMember04());
-                }
-                if (ObjectUtils.isEmpty(teamDb01)&& ObjectUtils.isEmpty(teamDb02)&& ObjectUtils.isEmpty(teamDb03)&& ObjectUtils.isEmpty(teamDb04)&& ObjectUtils.isEmpty(teamDb05)){
-                    //数据库中没有存储新Team中任何人的数据，可以插入数据库
-                    int i = teammapper.insert(team);
-                    if(i > 0)
-                        return true;
-                    else
-                        return false;
-                }
-            }//组长存在，拒绝插入
-        }//主键组长为空，拒接插入
-        return false;
+    public boolean saveteam(GroupReq req) {
+        int i = -1;
+        int j = -1;
+        GroupMemberPO groupMemberPO01 = new GroupMemberPO();
+        GroupMemberPO groupMemberPO02 = new GroupMemberPO();
+        GroupMemberPO groupMemberPO03 = new GroupMemberPO();
+        GroupMemberPO groupMemberPO04 = new GroupMemberPO();
+
+        GroupPO groupPO = new GroupPO();
+        //小组id
+        groupPO.setId(req.getGroupid());
+        //组名
+        groupPO.setName(req.getName());
+        //组长id
+        groupPO.setStudentTeacherId(req.getHeadmanid());
+
+        i = groupMapper.insert(groupPO);
+//        i = groupMapper.insertgroup(req.getGroupid(),req.getName(),req.getHeadmanid());
+        //先把组长插入进去
+        //小组id
+        groupMemberPO01.setGroupId(req.getGroupid());
+        //学生id
+        groupMemberPO01.setStudentTeacherId(req.getHeadmanid());
+        j = groupMemberMapper.insert(groupMemberPO01);
+
+        //查看组员
+        if (req.getMember01id() != 0) {
+            groupMemberPO02.setGroupId(req.getGroupid());
+            //学生id
+            groupMemberPO02.setStudentTeacherId(req.getMember01id());
+            j = groupMemberMapper.insert(groupMemberPO02);
+        }
+        if (req.getMember02id() != 0) {
+            groupMemberPO03.setGroupId(req.getGroupid());
+            //学生id
+            groupMemberPO03.setStudentTeacherId(req.getMember02id());
+            j = groupMemberMapper.insert(groupMemberPO03);
+        }
+        if (req.getMember03id() != 0) {
+            groupMemberPO04.setGroupId(req.getGroupid());
+            //学生id
+            groupMemberPO04.setStudentTeacherId(req.getMember03id());
+            j = groupMemberMapper.insert(groupMemberPO04);
+        }
+        if (i > 0 && j > 0) {
+            return true;
+        } else
+            return false;
     }
 
     public StudentPO selectByusername(String username){

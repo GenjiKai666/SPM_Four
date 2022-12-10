@@ -1,6 +1,7 @@
 package cn.edu.usst.spm.service;
 
 
+import cn.edu.usst.spm.req.GroupReq;
 import cn.edu.usst.spm.req.StudentLoginReq;
 import cn.edu.usst.spm.req.StudentSaveReq;
 import cn.edu.usst.spm.req.TeamReq;
@@ -11,6 +12,6 @@ public interface StudentService {
 
     StudentLoginResp login(StudentLoginReq req);
 
-    boolean saveteam(TeamReq req);
+    boolean saveteam(GroupReq req);
 
 }
