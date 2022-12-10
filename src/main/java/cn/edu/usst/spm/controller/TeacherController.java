@@ -60,7 +60,12 @@ public class TeacherController {
 
     @PostMapping(value="/connect")
     public void connect(@RequestParam Integer studentId,@RequestParam Integer teacherId) {
-        studentTeacherMapper.connect(studentId,teacherId);
+        if(studentTeacherMapper.findStudentId(studentId,teacherId)==null){
+            studentTeacherMapper.connect(studentId,teacherId);
+        }else{
+            studentTeacherMapper.deleteConnect(studentId,teacherId);
+        }
+
     }
 
 

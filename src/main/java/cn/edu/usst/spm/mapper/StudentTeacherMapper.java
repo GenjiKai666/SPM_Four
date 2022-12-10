@@ -3,10 +3,7 @@ package cn.edu.usst.spm.mapper;
 import cn.edu.usst.spm.bean.po.StudentPO;
 import cn.edu.usst.spm.bean.po.StudentTeacherPO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -23,4 +20,10 @@ public interface StudentTeacherMapper extends BaseMapper<StudentTeacherPO> {
 
     @Update("UPDATE STUDENT_TEACHER SET IS_CONFIRMED = 1 WHERE TEACHER_ID=#{teacherId}")
     void confirmed(Integer teacherId);
+
+    @Select("SELECT STUDENT_ID FROM STUDENT_TEACHER WHERE STUDENT_ID = #{studentId} and TEACHER_ID=#{teacherId}")
+    Integer findStudentId(Integer studentId, Integer teacherId);
+
+    @Delete("DELETE FROM STUDENT_TEACHER WHERE STUDENT_ID = #{studentId} and TEACHER_ID=#{teacherId}")
+    void deleteConnect(Integer studentId, Integer teacherId);
 }
