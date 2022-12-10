@@ -7,8 +7,8 @@ create table if not exists
     CLASS_NAME varchar(20)  not null,
     USERNAME   varchar(30)  not null unique,
     PASSWORD   varchar(128) not null,
-    EMAIL      varchar(30)  not null,
-    PHONE      varchar(15)  not null
+    EMAIL      varchar(30)  not null unique,
+    PHONE      varchar(15)  not null unique
 ) charset = utf8mb4;
 
 -- 注意要指定连接的时区
@@ -18,7 +18,7 @@ create table if not exists
     ID              int          not null auto_increment primary key,
     USERNAME        varchar(20)  not null unique,
     PASSWORD        varchar(128) not null,
-    COURSE_TIME     varchar(150)    not null comment '上课开始时间',
+    COURSE_TIME     varchar(150) not null comment '上课开始时间',
     COURSE_LOCATION varchar(20)  not null
 ) charset = utf8mb4;
 
@@ -28,18 +28,20 @@ create table if not exists
     ID           int     not null auto_increment primary key,
     STUDENT_ID   int     not null references STUDENT (`ID`),
     TEACHER_ID   int     not null references TEACHER (`ID`),
-    IS_CONFIRMED boolean not null default false
+    IS_CONFIRMED boolean not null default false,
+    constraint STUDENT_TEACHER_UNIQUE
+        unique (STUDENT_ID, TEACHER_ID)
 ) charset = utf8mb4;
 
 create table if not exists
     `SCORE`
 (
     ID                 int    not null auto_increment primary key,
-    STUDENT_TEACHER_ID int    not null references STUDENT_TEACHER (`ID`),
-    USUAL_GRADE        double null default null,
-    MID_EXAM_GRADE     double null default null,
-    FINAL_EXAM_GRADE   double null default null,
-    EXPERIMENT_GRADE   double null default null
+    STUDENT_TEACHER_ID int    not null unique references STUDENT_TEACHER (`ID`),
+    USUAL_GRADE        double null default null check ( USUAL_GRADE between 0 and 100),
+    MID_EXAM_GRADE     double null default null check ( MID_EXAM_GRADE between 0 and 100),
+    FINAL_EXAM_GRADE   double null default null check ( FINAL_EXAM_GRADE between 0 and 100),
+    EXPERIMENT_GRADE   double null default null check ( EXPERIMENT_GRADE between 0 and 100)
 ) charset = utf8mb4;
 
 -- 连接中一定要指定时区
@@ -59,7 +61,9 @@ create table if not exists
     ASSIGNMENT_ID      int    not null references ASSIGNMENT (`ID`),
     STUDENT_TEACHER_ID int    not null references STUDENT_TEACHER (`ID`),
     ANSWER             text   not null,
-    SCORE              double null default null
+    SCORE              double null default null,
+    constraint STUDENT_TEACHER_ASSIGNMENT_UNIQUE
+        unique (ASSIGNMENT_ID, STUDENT_TEACHER_ID)
 ) charset = utf8mb4;
 
 -- 选课之后，创建的小组，LEADER_ID 记录组长的id
