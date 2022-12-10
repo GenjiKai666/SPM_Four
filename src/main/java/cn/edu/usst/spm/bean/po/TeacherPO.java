@@ -39,4 +39,44 @@ public class TeacherPO {
 
     @TableField("COURSE_LOCATION")
     private String courseLocation;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getCourseTime() {
+        return courseTime;
+    }
+
+    public void setCourseTime(String courseTime) {
+        this.courseTime = courseTime;
+    }
+
+    public String getCourseLocation() {
+        return courseLocation;
+    }
+
+    public void setCourseLocation(String courseLocation) {
+        this.courseLocation = courseLocation;
+    }
 }
