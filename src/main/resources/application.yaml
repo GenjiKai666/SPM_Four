@@ -5,11 +5,12 @@ spring:
 #    url: jdbc:mysql://localhost:3306/test?allowMultiQueries=true
 #    username: test
 #    password: "123456"
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/qing?serverTimezone=GMT%2b8
+    url: jdbc:mysql://localhost:3306/user
     username: root
-    password: "021217"
+    password: "123456"
   mvc:
     hiddenmethod:
       filter:
@@ -30,6 +31,9 @@ spring:
           starttls:
             enable: true
             required: true
+  rsocket:
+    server:
+      port: 8080
 
 #mybatis-plus
 mybatis-plus:
