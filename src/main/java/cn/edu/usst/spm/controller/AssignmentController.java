@@ -1,6 +1,5 @@
 package cn.edu.usst.spm.controller;
 
-import cn.edu.usst.spm.bean.LoginUserImpl;
 import cn.edu.usst.spm.bean.po.AssignmentPO;
 import cn.edu.usst.spm.bean.po.StudentPO;
 import cn.edu.usst.spm.bean.po.TeacherPO;
@@ -12,18 +11,15 @@ import cn.edu.usst.spm.mapper.TeacherMapper;
 import cn.edu.usst.spm.service.AssignmentService;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 public class AssignmentController {
     @Autowired
     AssignmentService assignmentService;
