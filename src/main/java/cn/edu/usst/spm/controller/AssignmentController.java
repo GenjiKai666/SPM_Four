@@ -19,7 +19,6 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@CrossOrigin
 public class AssignmentController {
     @Autowired
     AssignmentService assignmentService;
@@ -85,8 +84,6 @@ public class AssignmentController {
     }
     @RequestMapping(value = "/assignment/getuserinfo",method = RequestMethod.GET)
     public LoginCheck getUserInfo(HttpSession session){
-        session.setAttribute("username","李四");
-        session.setAttribute("isTeacher",true);
         String username = (String)session.getAttribute("username");
         Boolean isTeacher = (Boolean) session.getAttribute("isTeacher");
         Integer teacher;
