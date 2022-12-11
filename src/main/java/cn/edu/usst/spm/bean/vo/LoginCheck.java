@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class AssignmentVO {
+public class LoginCheck {
     Integer id;
-    String question;
-    String deadline;
-    Double score;
+    Integer teacher;
 }

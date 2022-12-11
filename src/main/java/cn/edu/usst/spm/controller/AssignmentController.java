@@ -1,22 +1,36 @@
 package cn.edu.usst.spm.controller;
 
+import cn.edu.usst.spm.bean.LoginUserImpl;
 import cn.edu.usst.spm.bean.po.AssignmentPO;
+import cn.edu.usst.spm.bean.po.StudentPO;
+import cn.edu.usst.spm.bean.po.TeacherPO;
 import cn.edu.usst.spm.bean.vo.AssignmentVO;
-import cn.edu.usst.spm.mapper.StudentTeacherAssignmentMapper;
+import cn.edu.usst.spm.bean.vo.LoginCheck;
+import cn.edu.usst.spm.bean.vo.StudentComittedAnswerVO;
+import cn.edu.usst.spm.mapper.StudentMapper;
+import cn.edu.usst.spm.mapper.TeacherMapper;
 import cn.edu.usst.spm.service.AssignmentService;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 public class AssignmentController {
     @Autowired
     AssignmentService assignmentService;
+    @Autowired
+    StudentMapper studentMapper;
+    @Autowired
+    TeacherMapper teacherMapper;
 
     /**
      * 处理发布新题目的请求
@@ -42,9 +56,9 @@ public class AssignmentController {
     public AssignmentVO selectAssignmentById(@NotNull @RequestParam("id") Integer id) {
         AssignmentPO assignmentPO = assignmentService.selectAssignmentById(id);
         if (assignmentPO == null) {
-            return new AssignmentVO(null, null,null);
+            return new AssignmentVO(null, null,null,null);
         }
-        return new AssignmentVO(assignmentPO.getQuestion(), assignmentPO.getDeadline(),assignmentPO.getByGroup());
+        return new AssignmentVO(assignmentPO.getId(),assignmentPO.getQuestion(), assignmentPO.getDeadline().toString(),null);
     }
 
     /**
@@ -57,15 +71,51 @@ public class AssignmentController {
     public int deleteAssignmentById(@NotNull @RequestParam("id") Integer id) {
         return assignmentService.deleteAssignmentById(id);
     }
-    @RequestMapping(value = "/assignment/student_submit",method = RequestMethod.POST)
+    @RequestMapping(value = "/assignment/student_submit",method = RequestMethod.GET)
     public int studentSubmitAnswer(@NotNull @RequestParam("assignmentid") Integer assignmentId,
-                                   @NotNull @RequestParam("studentteacherid") Integer studentTeacherId,
+                                   @NotNull @RequestParam("studentid") Integer studentId,
                                    @RequestParam("answer") String answer){
-        return  assignmentService.studentSubmitAnswer(assignmentId,studentTeacherId,answer);
+        return  assignmentService.studentSubmitAnswer(assignmentId,studentId,answer);
     }
-    @RequestMapping(value = "/assignment/teacher_check",method = RequestMethod.POST)
+    @RequestMapping(value = "/assignment/teacher_check",method = RequestMethod.GET)
     public int teacherCheckById(@NotNull @RequestParam("id") Integer id,
                                 @NotNull @RequestParam("score") Double score){
         return assignmentService.teacherCheckById(id,score);
+    }
+    @RequestMapping(value = "/assignment/getassignmentbystudentid",method = RequestMethod.GET)
+    public List<AssignmentVO> getassignmentbystudentid(@NotNull @RequestParam("studentid") Integer studentid){
+        List<AssignmentVO> assignmentVOS = assignmentService.getAssignmentByStudentId(studentid);
+        return  assignmentVOS;
+    }
+    @RequestMapping(value = "/assignment/getuserinfo",method = RequestMethod.GET)
+    public LoginCheck getUserInfo(HttpSession session){
+        session.setAttribute("username","李四");
+        session.setAttribute("isTeacher",true);
+        String username = (String)session.getAttribute("username");
+        Boolean isTeacher = (Boolean) session.getAttribute("isTeacher");
+        Integer teacher;
+        if(isTeacher == null || username == null){
+            return null;
+        }
+        Integer id = null;
+        if(isTeacher){
+            id = teacherMapper.selectOne(Wrappers
+                    .lambdaQuery(TeacherPO.class)
+                    .eq(TeacherPO::getUserName,username))
+                    .getId();
+            teacher = 1;
+        }
+        else{
+            id = studentMapper.selectOne(Wrappers
+                            .lambdaQuery(StudentPO.class)
+                            .eq(StudentPO::getUsername,username))
+                    .getId();
+            teacher = 0;
+        }
+        return new LoginCheck(id,teacher);
+    }
+    @RequestMapping(value = "/assignment/getcommittedanswerbyteacherid",method = RequestMethod.GET)
+    public List<StudentComittedAnswerVO> getAnswers(@RequestParam("teacherid") @NotNull Integer teacherid){
+        return assignmentService.getCommittedAnswerByTeacherId(teacherid);
     }
 }
