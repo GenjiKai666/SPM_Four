@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.usst.spm.mapper.UserMapper">
+
+    <select id="findPage" resultType="cn.edu.usst.spm.bean.po.Score">
+        select score.*, student.USERNAME as student from score
+        left join student_teacher
+        on score.STUDENT_TEACHER_ID = student_teacher.ID
+        left join student
+        on student_teacher.STUDENT_ID = student.ID
+        <where>
+           <if test="name != null and name != ''">
+               and student.USERNAME like concat('%', #{name}, '%')
+           </if>
+        </where>
+    </select>
+</mapper>
