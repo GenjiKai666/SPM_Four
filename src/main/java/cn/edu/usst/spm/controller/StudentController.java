@@ -1,9 +1,13 @@
 package cn.edu.usst.spm.controller;
 
+import cn.edu.usst.spm.bean.LoginUser;
 import cn.edu.usst.spm.bean.LoginUserImpl;
 import cn.edu.usst.spm.bean.po.StudentPO;
+import cn.edu.usst.spm.bean.po.TeacherPO;
+import cn.edu.usst.spm.bean.vo.GradeInfoVO;
 import cn.edu.usst.spm.mapper.StudentMapper;
 import cn.edu.usst.spm.mapper.StudentTeacherMapper;
+import cn.edu.usst.spm.mapper.TeacherMapper;
 import cn.edu.usst.spm.req.GroupReq;
 import cn.edu.usst.spm.req.StudentLoginReq;
 import cn.edu.usst.spm.req.StudentSaveReq;
@@ -11,9 +15,12 @@ import cn.edu.usst.spm.req.TeamReq;
 import cn.edu.usst.spm.resp.CommonResp;
 import cn.edu.usst.spm.resp.StudentLoginResp;
 import cn.edu.usst.spm.service.StudentService;
+import cn.edu.usst.spm.service.TeacherService;
 import cn.edu.usst.spm.util.Constant;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -26,13 +33,43 @@ public class StudentController {
     @Autowired
     private StudentTeacherMapper studentTeacherMapper;
 
+    @Autowired
+    private TeacherMapper teacherMapper;
+
+    @Autowired
+    private StudentMapper studentMapper;
+
 
     @GetMapping("/findstudents")
     List<StudentPO> findStudents(@RequestParam Integer teacherId) {
         return studentTeacherMapper.findStudentByTeacherId(teacherId);
+    };
+
+    @GetMapping("/loginTeacher")
+    public ResponseEntity<TeacherPO> showTeacher(HttpSession session) {
+        LoginUser user = (LoginUser) session.getAttribute(Constant.USER);
+
+        // 不是老师，返回403拒绝访问
+        if (!user.isTeacher()) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
+        TeacherPO teacher = teacherMapper.getTeacher(user.getId());
+        return new ResponseEntity<>(teacher, HttpStatus.OK);
     }
 
-    ;
+    @GetMapping("/loginStudent")
+    public ResponseEntity<StudentPO> showStudent(HttpSession session) {
+        LoginUser user = (LoginUser) session.getAttribute(Constant.USER);
+
+        // 不是学生，返回403拒绝访问
+        if (user.isTeacher()) {
+            StudentPO student = studentMapper.getStudnet(user.getId());
+            return new ResponseEntity<>(student, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    }
 
     @Autowired
     private StudentService studentService;
