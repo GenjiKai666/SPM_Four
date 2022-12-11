@@ -10,8 +10,9 @@ public class CORSConfiguration extends WebMvcConfigurationSupport {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedMethods("*")
-                .allowedOrigins("*")
-                .allowedHeaders("*");
+                .allowedOrigins("http://localhost:5713/**")
+                .allowedHeaders("*")
+                .allowCredentials(true);
         super.addCorsMappings(registry);
     }
 }

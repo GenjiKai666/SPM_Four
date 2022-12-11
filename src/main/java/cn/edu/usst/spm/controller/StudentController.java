@@ -27,7 +27,6 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
-@CrossOrigin
 @RequestMapping("/student")
 public class StudentController {
     @Autowired

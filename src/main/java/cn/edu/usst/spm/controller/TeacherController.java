@@ -18,7 +18,6 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
-@CrossOrigin
 @RequestMapping("/teacher")
 public class TeacherController {
 
