@@ -1,10 +1,10 @@
 package cn.edu.usst.spm.controller;
 
+import cn.edu.usst.spm.bean.po.Score;
+import cn.edu.usst.spm.common.Result;
+import cn.edu.usst.spm.service.imp.ScoreServise;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.example.springvue.common.Result;
-import com.example.springvue.entity.Score;
-import com.example.springvue.service.ScoreServise;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

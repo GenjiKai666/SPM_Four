@@ -1,9 +1,9 @@
 package cn.edu.usst.spm.service.imp;
 
+import cn.edu.usst.spm.bean.po.Score;
+import cn.edu.usst.spm.mapper.UserMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.springvue.entity.Score;
-import com.example.springvue.mapper.UserMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

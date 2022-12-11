@@ -1,8 +1,8 @@
 package cn.edu.usst.spm.mapper;
 
+import cn.edu.usst.spm.bean.po.Score;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.example.springvue.entity.Score;
 import org.apache.ibatis.annotations.Param;
 
 //@Mapper 使用了@MapperScan代替，遵从配置要放在配置类上面的原则

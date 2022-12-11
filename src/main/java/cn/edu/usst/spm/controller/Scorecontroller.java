@@ -1,9 +1,9 @@
 package cn.edu.usst.spm.controller;
 
+import cn.edu.usst.spm.bean.po.Score;
+import cn.edu.usst.spm.service.imp.ScoreServise;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.example.springvue.entity.Score;
-import com.example.springvue.service.ScoreServise;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
