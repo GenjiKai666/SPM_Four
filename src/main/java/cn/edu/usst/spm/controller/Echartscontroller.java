@@ -32,7 +32,7 @@ public class Echartscontroller {
         int best = 0;                //90-100
         int sum = 0,passnum =0;
         for (Score user : scoreList) {
-            score = user.getFINAL_SCORE();
+            score = user.getFinalscore();
             if (score<60) {
                 fail+=1;
             }else if(score >= 60 && score < 70){
