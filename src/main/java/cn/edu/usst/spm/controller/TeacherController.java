@@ -72,6 +72,7 @@ public class TeacherController {
     public CommonResp login(@RequestBody TeacherLoginReq req, HttpSession session){
         CommonResp<Object> resp = new CommonResp<>();
         TeacherLoginResp teacherLoginResp =  teacherService.login(req);
+        teacherLoginResp.setUsername(req.getUsername());
         if (teacherLoginResp == null) {
             resp.setSuccess(false);
             return resp;
