@@ -30,7 +30,7 @@ public class GradeManageControllerByTang {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
-        List<GradeInfoVO> grades = gradeManageServiceByTang.getGrades(1);
+        List<GradeInfoVO> grades = gradeManageServiceByTang.getGrades(user.getId());
         return new ResponseEntity<>(grades, HttpStatus.OK);
     }
 
