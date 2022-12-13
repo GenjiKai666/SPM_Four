@@ -4,6 +4,7 @@ import cn.edu.usst.spm.bean.LoginUser;
 import cn.edu.usst.spm.bean.vo.GradeInfoVO;
 import cn.edu.usst.spm.service.GradeManageServiceByTang;
 import cn.edu.usst.spm.util.Constant;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
+@Log4j2
 public class GradeManageControllerByTang {
 
     @Autowired
@@ -23,7 +25,8 @@ public class GradeManageControllerByTang {
         LoginUser user = (LoginUser) session.getAttribute(Constant.USER);
 
         // 不是老师，返回403拒绝访问
-        if (!user.isTeacher()) {
+        if (user == null || !user.isTeacher()) {
+            log.warn("无权限的访问");
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
@@ -36,7 +39,8 @@ public class GradeManageControllerByTang {
         LoginUser user = (LoginUser) session.getAttribute(Constant.USER);
 
         // 不是学生，返回403拒绝访问
-        if (user.isTeacher()) {
+        if (user == null || user.isTeacher()) {
+            log.warn("无权限的访问");
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         GradeInfoVO grade = gradeManageServiceByTang.getGrade(user.getId());
@@ -47,7 +51,8 @@ public class GradeManageControllerByTang {
     public ResponseEntity<Integer> sendText(@RequestBody List<Integer> receivers, HttpSession session) {
         LoginUser user = (LoginUser) session.getAttribute(Constant.USER);
         // 不是老师，403拒绝
-        if (!user.isTeacher()) {
+        if (user == null || !user.isTeacher()) {
+            log.warn("无权限的访问");
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         if (receivers != null && receivers.size() > 0) {
@@ -60,7 +65,8 @@ public class GradeManageControllerByTang {
     public ResponseEntity<Integer> sendWarning(@RequestBody List<Integer> receivers, HttpSession session) {
         LoginUser user = (LoginUser) session.getAttribute(Constant.USER);
         // 不是老师，403拒绝
-        if (!user.isTeacher()) {
+        if (user == null || !user.isTeacher()) {
+            log.warn("无权限的访问");
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         if (receivers != null && receivers.size() > 0) {
