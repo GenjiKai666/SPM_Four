@@ -28,7 +28,7 @@ values (1, 'TA', '123456', '周一（8,9）', '一教503'), -- 有一名确认�
 insert into STUDENT_TEACHER
 values (1, 1, 1, 0),
        (2, 2, 1, 1),
-       (3, 3, 2, 1);
+       (3, 3, 1, 1);
 
 insert into SCORE
 values
