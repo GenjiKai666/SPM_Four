@@ -82,7 +82,7 @@ public class TeacherController {
         // 补充之前定义的接口的登陆状态记录，不移除上面的记录，防止不兼容问题发生
         TeacherPO teacherPO = teacherMapper.selectOne(Wrappers.lambdaQuery(TeacherPO.class)
                 .eq(TeacherPO::getUserName, teacherLoginResp.getUsername()));
-        session.setAttribute(Constant.USER, new LoginUserImpl(teacherPO.getId(), false));
+        session.setAttribute(Constant.USER, new LoginUserImpl(teacherPO.getId(), true));
         return resp;
     }
     @PostMapping("/register")
