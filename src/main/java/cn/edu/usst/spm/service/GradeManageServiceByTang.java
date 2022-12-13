@@ -49,8 +49,11 @@ public class GradeManageServiceByTang {
                 .selectOne(Wrappers
                         .lambdaQuery(StudentTeacherPO.class)
                         .eq(StudentTeacherPO::getStudentId, studentId));
-        ScorePO scorePO = scoreMapper.selectOne(Wrappers.lambdaQuery(ScorePO.class)
-                .eq(ScorePO::getStudentTeacherId, studentTeacherPO.getId()));
+        ScorePO scorePO = null;
+        if (studentTeacherPO != null) {
+            scoreMapper.selectOne(Wrappers.lambdaQuery(ScorePO.class)
+                    .eq(ScorePO::getStudentTeacherId, studentTeacherPO.getId()));
+        }
 
         return getGrade(studentPO, scorePO);
     }
