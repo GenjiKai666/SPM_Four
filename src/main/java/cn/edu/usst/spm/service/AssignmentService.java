@@ -122,7 +122,7 @@ public class AssignmentService {
                             .lambdaQuery(StudentTeacherAssignmentPO.class)
                             .eq(StudentTeacherAssignmentPO::getStudentTeacherId,studentTeacherPO.getId()));
             for(StudentTeacherAssignmentPO studentTeacherAssignmentPO:studentTeacherAssignmentPOS){
-                String question = assignmentMapper.selectById(studentTeacherAssignmentPO.getId()).getQuestion();
+                String question = assignmentMapper.selectById(studentTeacherAssignmentPO.getAssignmentId()).getQuestion();
                 String studentName = studentMapper.selectById(studentTeacherPO.getStudentId()).getUsername();
                 studentComittedAnswerVOS.add(new StudentComittedAnswerVO(studentTeacherAssignmentPO.getId(),
                         question,
