@@ -1,4 +1,4 @@
-use test;
+use spm;
 
 create table if not exists
     STUDENT
@@ -62,7 +62,7 @@ create table if not exists
     ID                 int    not null auto_increment primary key,
     ASSIGNMENT_ID      int    not null references ASSIGNMENT (`ID`),
     STUDENT_TEACHER_ID int    not null references STUDENT_TEACHER (`ID`),
-    ANSWER             text   not null,
+    ANSWER             text   ,
     SCORE              double null default null,
     constraint STUDENT_TEACHER_ASSIGNMENT_UNIQUE
         unique (ASSIGNMENT_ID, STUDENT_TEACHER_ID)
