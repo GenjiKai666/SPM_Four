@@ -51,9 +51,9 @@ public class AssignmentController {
     public AssignmentVO selectAssignmentById(@NotNull @RequestParam("id") Integer id) {
         AssignmentPO assignmentPO = assignmentService.selectAssignmentById(id);
         if (assignmentPO == null) {
-            return new AssignmentVO(null, null,null,null);
+            return new AssignmentVO(null, null,null,null,null);
         }
-        return new AssignmentVO(assignmentPO.getId(),assignmentPO.getQuestion(), assignmentPO.getDeadline().toString(),null);
+        return new AssignmentVO(assignmentPO.getId(),assignmentPO.getQuestion(), assignmentPO.getDeadline().toString(),assignmentPO.getDeadline().getTime(),null);
     }
 
     /**
@@ -110,5 +110,15 @@ public class AssignmentController {
     @RequestMapping(value = "/assignment/getcommittedanswerbyteacherid",method = RequestMethod.GET)
     public List<StudentComittedAnswerVO> getAnswers(@RequestParam("teacherid") @NotNull Integer teacherid){
         return assignmentService.getCommittedAnswerByTeacherId(teacherid);
+    }
+    @RequestMapping(value = "/assignment/publishAssignment",method = RequestMethod.GET)
+    public void publishAssignment(Integer teacherid,String question,Long deadline,Integer group){
+        Boolean byGroup;
+        if(group == 1){
+            byGroup = true;
+        } else{
+            byGroup = false;
+        }
+        assignmentService.publishAssignment(teacherid,question,deadline,byGroup);
     }
 }

@@ -14,10 +14,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Service
@@ -104,7 +101,11 @@ public class AssignmentService {
         for(StudentTeacherAssignmentPO po:studentTeacherAssignmentList){
             AssignmentPO temp = assignmentMapper.selectById(po.getAssignmentId());
             if(temp.getByGroup() == false){
-                assignments.add(new AssignmentVO(temp.getId(), temp.getQuestion(),temp.getDeadline().toString(),po.getScore()));
+                assignments.add(new AssignmentVO(temp.getId(),
+                        temp.getQuestion(),
+                        temp.getDeadline().toString(),
+                        temp.getDeadline().getTime(),
+                        po.getScore()));
             }
         }
         return assignments;
@@ -134,5 +135,22 @@ public class AssignmentService {
             }
         }
         return studentComittedAnswerVOS;
+    }
+    public int publishAssignment(Integer teacherID,String question,Long deadline,Boolean group){
+        AssignmentPO assignmentPO = new AssignmentPO(null,question,new Date(deadline),group);
+        assignmentMapper.insert(assignmentPO);
+        Integer assignmentID = assignmentPO.getId();
+        List<StudentTeacherPO> studentTeacherPOS = studentTeacherMapper
+                .selectList(Wrappers
+                        .lambdaQuery(StudentTeacherPO.class)
+                .eq(StudentTeacherPO::getTeacherId,teacherID));
+        for(StudentTeacherPO po:studentTeacherPOS){
+            studentTeacherAssignmentMapper.insert(new StudentTeacherAssignmentPO(null,
+                    assignmentID,
+                    po.getId(),
+                    null,
+                    null));
+        }
+        return 1;
     }
 }

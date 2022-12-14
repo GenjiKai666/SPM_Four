@@ -13,5 +13,6 @@ public class AssignmentVO {
     Integer id;
     String question;
     String deadline;
+    Long deadline_time;
     Double score;
 }
