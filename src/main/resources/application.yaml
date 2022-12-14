@@ -8,9 +8,9 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/user
+    url: jdbc:mysql://localhost:3306/qing
     username: root
-    password: "123456"
+    password: "021217"
   mvc:
     hiddenmethod:
       filter:

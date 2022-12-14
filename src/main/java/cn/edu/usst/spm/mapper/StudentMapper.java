@@ -9,6 +9,6 @@ import org.apache.ibatis.annotations.Select;
 @Mapper
 public interface StudentMapper extends BaseMapper<StudentPO> {
 
-    @Select("SELECT * from student where STUDENT_ID =#{id}")
+    @Select("SELECT * from student where ID =#{id}")
     StudentPO getStudnet(Integer id);
 }

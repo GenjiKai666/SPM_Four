@@ -32,6 +32,6 @@ public interface TeacherMapper extends BaseMapper<TeacherPO> {
     @Select("SELECT * from teacher where COURSE_TIME LIKE '%周五%' ")
     List<TeacherPO> selectWeekfive(Integer weeknum);
 
-    @Select("SELECT * from teacher where TEACHER_ID =#{id}")
+    @Select("SELECT * from teacher where id =#{id}")
     TeacherPO getTeacher(Integer id);
 }

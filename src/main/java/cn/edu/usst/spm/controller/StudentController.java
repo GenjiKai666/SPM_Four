@@ -62,7 +62,7 @@ public class StudentController {
         LoginUser user = (LoginUser) session.getAttribute(Constant.USER);
 
         // 不是学生，返回403拒绝访问
-        if (user.isTeacher()) {
+        if (!user.isTeacher()) {
             StudentPO student = studentMapper.getStudnet(user.getId());
             return new ResponseEntity<>(student, HttpStatus.OK);
         }
