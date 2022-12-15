@@ -1,27 +1,31 @@
 package cn.edu.usst.spm.service.imp;
 
-import cn.edu.usst.spm.bean.po.*;
-import cn.edu.usst.spm.mapper.*;
+import cn.edu.usst.spm.bean.po.GroupMemberPO;
+import cn.edu.usst.spm.bean.po.GroupPO;
+import cn.edu.usst.spm.bean.po.StudentPO;
+import cn.edu.usst.spm.bean.po.Team;
+import cn.edu.usst.spm.mapper.GroupMapper;
+import cn.edu.usst.spm.mapper.GroupMemberMapper;
+import cn.edu.usst.spm.mapper.StudentMapper;
+import cn.edu.usst.spm.mapper.Teammapper;
 import cn.edu.usst.spm.req.GroupReq;
 import cn.edu.usst.spm.req.StudentLoginReq;
 import cn.edu.usst.spm.req.StudentSaveReq;
+import cn.edu.usst.spm.req.TeamReq;
 import cn.edu.usst.spm.resp.StudentLoginResp;
 import cn.edu.usst.spm.service.StudentService;
 import cn.edu.usst.spm.service.utils.CopyUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 
 @Service
-@Transactional
 public class StudentServiceimp extends ServiceImpl<StudentMapper, StudentPO> implements StudentService {
 
     @Autowired
@@ -32,9 +36,6 @@ public class StudentServiceimp extends ServiceImpl<StudentMapper, StudentPO> imp
     GroupMapper groupMapper;
     @Autowired
     GroupMemberMapper groupMemberMapper;
-
-    @Autowired
-    StudentTeacherMapper studentTeacherMapper;
 
     @Override
     public boolean register(StudentSaveReq req) {
@@ -66,26 +67,6 @@ public class StudentServiceimp extends ServiceImpl<StudentMapper, StudentPO> imp
     }
 
 
-    /**
-     * 将学生用户名转变为studentTeacher的id
-     * @param username 学生用户名
-     * @return 找到返回id,没找到返回null
-     */
-    private Integer username2id(String username) {
-        StudentPO studentPO = studentrmapper
-                .selectOne(Wrappers.lambdaQuery(StudentPO.class)
-                        .eq(StudentPO::getUsername, username));
-        if (studentPO == null){
-            return null;
-        }
-        StudentTeacherPO studentTeacherPO = studentTeacherMapper
-                .selectOne(Wrappers.lambdaQuery(StudentTeacherPO.class)
-                        .eq(StudentTeacherPO::getStudentId, studentPO.getId()));
-        if(studentTeacherPO == null){
-            return null;
-        }
-        return studentTeacherPO.getId();
-    }
     @Override
     public boolean saveteam(GroupReq req) {
         int i = -1;
@@ -96,38 +77,39 @@ public class StudentServiceimp extends ServiceImpl<StudentMapper, StudentPO> imp
         GroupMemberPO groupMemberPO04 = new GroupMemberPO();
 
         GroupPO groupPO = new GroupPO();
-        //小组id---自动生成
+        //小组id
+        groupPO.setId(req.getGroupid());
         //组名
         groupPO.setName(req.getName());
         //组长id
-        groupPO.setStudentTeacherId(username2id(req.getHeadman()));
+        groupPO.setStudentTeacherId(req.getHeadmanid());
 
         i = groupMapper.insert(groupPO);
-
+//        i = groupMapper.insertgroup(req.getGroupid(),req.getName(),req.getHeadmanid());
         //先把组长插入进去
         //小组id
-        groupMemberPO01.setGroupId(groupPO.getId());
+        groupMemberPO01.setGroupId(req.getGroupid());
         //学生id
-        groupMemberPO01.setStudentTeacherId(username2id(req.getHeadman()));
+        groupMemberPO01.setStudentTeacherId(req.getHeadmanid());
         j = groupMemberMapper.insert(groupMemberPO01);
 
         //查看组员
-        if (req.getMember01() != null && !req.getMember01().equals("")) {
-            groupMemberPO02.setGroupId(groupPO.getId());
+        if (req.getMember01id() != 0) {
+            groupMemberPO02.setGroupId(req.getGroupid());
             //学生id
-            groupMemberPO02.setStudentTeacherId(username2id(req.getMember01()));
+            groupMemberPO02.setStudentTeacherId(req.getMember01id());
             j = groupMemberMapper.insert(groupMemberPO02);
         }
-        if (req.getMember02() != null && !req.getMember02().equals("")) {
-            groupMemberPO03.setGroupId(groupPO.getId());
+        if (req.getMember02id() != 0) {
+            groupMemberPO03.setGroupId(req.getGroupid());
             //学生id
-            groupMemberPO03.setStudentTeacherId(username2id(req.getMember02()));
+            groupMemberPO03.setStudentTeacherId(req.getMember02id());
             j = groupMemberMapper.insert(groupMemberPO03);
         }
-        if (req.getMember03() != null && !req.getMember03().equals("")) {
-            groupMemberPO04.setGroupId(groupPO.getId());
+        if (req.getMember03id() != 0) {
+            groupMemberPO04.setGroupId(req.getGroupid());
             //学生id
-            groupMemberPO04.setStudentTeacherId(username2id(req.getMember03()));
+            groupMemberPO04.setStudentTeacherId(req.getMember03id());
             j = groupMemberMapper.insert(groupMemberPO04);
         }
         if (i > 0 && j > 0) {
