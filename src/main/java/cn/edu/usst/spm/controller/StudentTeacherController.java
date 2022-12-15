@@ -19,5 +19,6 @@ public class StudentTeacherController {
     @PostMapping("/confirmed")
     public void confirmedStudents(@RequestParam int teacherId){
       studentTeacherMapper.confirmed(teacherId);
+      studentTeacherMapper.insert();
     };
 }

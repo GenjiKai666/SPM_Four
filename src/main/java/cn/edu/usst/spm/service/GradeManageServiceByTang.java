@@ -41,6 +41,7 @@ public class GradeManageServiceByTang {
         this.studentTeacherAssignmentMapper = studentTeacherAssignmentMapper;
         this.scoreMapper = scoreMapper;
         this.mailService = mailService;
+
     }
 
     public GradeInfoVO getGrade(int studentId) {

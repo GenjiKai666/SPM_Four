@@ -1,15 +1,20 @@
 package cn.edu.usst.spm.controller;
 
+import cn.edu.usst.spm.bean.LoginUser;
 import cn.edu.usst.spm.bean.po.Score;
 import cn.edu.usst.spm.common.Result;
 import cn.edu.usst.spm.service.imp.ScoreServise;
+import cn.edu.usst.spm.util.Constant;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +27,8 @@ public class Echartscontroller {
     ScoreServise scoreServise;
 
     @GetMapping("/score")                     //当有多个方法返回多种数据时，前端就靠定义的路径进行请求区分
-    public Result get(){
+    public Result get(HttpSession session){
+
         List<Score> scoreList = scoreServise.list();
         double score = 0;
         int fail = 0;                //不及格
