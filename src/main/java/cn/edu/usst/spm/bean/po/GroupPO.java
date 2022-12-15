@@ -1,5 +1,6 @@
 package cn.edu.usst.spm.bean.po;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -22,7 +23,7 @@ import lombok.NoArgsConstructor;
  */
 @TableName("GROUP01")
 public class GroupPO {
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Integer id;                 // 逻辑主键，id
     @TableField
     private String name;                // 小组名字，不可重复，长度不超过25
