@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -112,13 +115,16 @@ public class AssignmentController {
         return assignmentService.getCommittedAnswerByTeacherId(teacherid);
     }
     @RequestMapping(value = "/assignment/publishAssignment",method = RequestMethod.GET)
-    public void publishAssignment(Integer teacherid,String question,Long deadline,Integer group){
+    public void publishAssignment(Integer teacherid,String question,String deadline,Integer group){
+        DateTimeFormatter ftf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime parse = LocalDateTime.parse(deadline, ftf);
+        Long deadline_time = LocalDateTime.from(parse).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
         Boolean byGroup;
         if(group == 1){
             byGroup = true;
         } else{
             byGroup = false;
         }
-        assignmentService.publishAssignment(teacherid,question,deadline,byGroup);
+        assignmentService.publishAssignment(teacherid,question,deadline_time,byGroup);
     }
 }
