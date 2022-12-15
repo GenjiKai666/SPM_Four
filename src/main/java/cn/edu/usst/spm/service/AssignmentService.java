@@ -1,14 +1,9 @@
 package cn.edu.usst.spm.service;
 
-import cn.edu.usst.spm.bean.po.AssignmentPO;
-import cn.edu.usst.spm.bean.po.StudentTeacherAssignmentPO;
-import cn.edu.usst.spm.bean.po.StudentTeacherPO;
+import cn.edu.usst.spm.bean.po.*;
 import cn.edu.usst.spm.bean.vo.AssignmentVO;
 import cn.edu.usst.spm.bean.vo.StudentComittedAnswerVO;
-import cn.edu.usst.spm.mapper.AssignmentMapper;
-import cn.edu.usst.spm.mapper.StudentMapper;
-import cn.edu.usst.spm.mapper.StudentTeacherAssignmentMapper;
-import cn.edu.usst.spm.mapper.StudentTeacherMapper;
+import cn.edu.usst.spm.mapper.*;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +22,28 @@ public class AssignmentService {
     StudentTeacherMapper studentTeacherMapper;
     @Autowired
     StudentMapper studentMapper;
+    @Autowired
+    GroupMemberMapper groupMemberMapper;
+    @Autowired
+    GroupMapper groupMapper;
+
+    private int isLeader(Integer studentid){
+        Integer student_teacher_id = studentTeacherMapper.selectOne(Wrappers
+                .lambdaQuery(StudentTeacherPO.class)
+                .eq(StudentTeacherPO::getStudentId,studentid))
+                .getId();
+        Integer groupid = groupMemberMapper.selectOne(Wrappers
+                .lambdaQuery(GroupMemberPO.class)
+                .eq(GroupMemberPO::getStudentTeacherId,student_teacher_id))
+                .getGroupId();
+        Integer leaderid = groupMapper.selectById(groupid).getStudentTeacherId();
+        if(student_teacher_id == leaderid){
+            return 1;
+        }
+        else{
+            return 0;
+        }
+    }
 
     /**
      * 向数据库中插入新的作业
@@ -90,6 +107,7 @@ public class AssignmentService {
     }
 
     public List<AssignmentVO> getAssignmentByStudentId(Integer studentId) {
+        Integer isLeader = isLeader(studentId);
         List<AssignmentVO> assignments = new ArrayList<>();
         Integer student_teacher_id = studentTeacherMapper.selectOne(Wrappers.lambdaQuery(StudentTeacherPO.class)
                 .eq(StudentTeacherPO::getStudentId, studentId)).getId();
@@ -100,12 +118,21 @@ public class AssignmentService {
                         .last("order by ASSIGNMENT_ID"));
         for(StudentTeacherAssignmentPO po:studentTeacherAssignmentList){
             AssignmentPO temp = assignmentMapper.selectById(po.getAssignmentId());
-            if(temp.getByGroup() == false){
+            if(isLeader == 1){
                 assignments.add(new AssignmentVO(temp.getId(),
                         temp.getQuestion(),
                         temp.getDeadline().toString(),
                         temp.getDeadline().getTime(),
                         po.getScore()));
+            }
+            else{
+                if(temp.getByGroup() == false){
+                    assignments.add(new AssignmentVO(temp.getId(),
+                            temp.getQuestion(),
+                            temp.getDeadline().toString(),
+                            temp.getDeadline().getTime(),
+                            po.getScore()));
+                }
             }
         }
         return assignments;
