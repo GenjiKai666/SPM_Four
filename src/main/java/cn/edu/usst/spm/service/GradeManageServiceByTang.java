@@ -51,7 +51,7 @@ public class GradeManageServiceByTang {
                         .eq(StudentTeacherPO::getStudentId, studentId));
         ScorePO scorePO = null;
         if (studentTeacherPO != null) {
-            scoreMapper.selectOne(Wrappers.lambdaQuery(ScorePO.class)
+            scorePO = scoreMapper.selectOne(Wrappers.lambdaQuery(ScorePO.class)
                     .eq(ScorePO::getStudentTeacherId, studentTeacherPO.getId()));
         }
 
