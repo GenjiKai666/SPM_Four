@@ -32,10 +32,16 @@ public class AssignmentService {
                 .lambdaQuery(StudentTeacherPO.class)
                 .eq(StudentTeacherPO::getStudentId,studentid))
                 .getId();
+        if(student_teacher_id == null){
+            return 0;
+        }
         Integer groupid = groupMemberMapper.selectOne(Wrappers
                 .lambdaQuery(GroupMemberPO.class)
                 .eq(GroupMemberPO::getStudentTeacherId,student_teacher_id))
                 .getGroupId();
+        if(groupid == null){
+            return 0;
+        }
         Integer leaderid = groupMapper.selectById(groupid).getStudentTeacherId();
         if(student_teacher_id == leaderid){
             return 1;
